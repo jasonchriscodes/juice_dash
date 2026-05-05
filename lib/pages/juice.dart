@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:juice_dash/services/support_widget.dart';
 
@@ -142,6 +144,38 @@ class _JuiceState extends State<Juice> {
             child: const TextField(
               maxLines: 5,
               decoration: InputDecoration(border: InputBorder.none),
+            ),
+          ),
+          const SizedBox(height: 40.0),
+          Container(
+            height: 90,
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+            decoration: BoxDecoration(
+                border: Border.all(width: 1.5),
+                borderRadius: BorderRadius.circular(10)),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Text Price : \$50",
+                  style: AppWidget.headlineTextStyle(18),
+                ),
+                const SizedBox(height: 5),
+                Container(
+                    width: 200,
+                    height: 35,
+                    decoration: BoxDecoration(
+                        color: const Color(0xffecb47f),
+                        border: Border.all(width: 1.5),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Center(
+                      child: Text(
+                        "Mix and Pay",
+                        style: AppWidget.headlineTextStyle(18),
+                      ),
+                    ))
+              ],
             ),
           )
         ],
