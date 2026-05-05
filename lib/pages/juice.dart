@@ -124,6 +124,26 @@ class _JuiceState extends State<Juice> {
               ],
             ),
           ),
+          const SizedBox(height: 20.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text(
+              "Add notes",
+              style: AppWidget.headlineTextStyle(18.0),
+            ),
+          ),
+          const SizedBox(height: 10.0),
+          Container(
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+            decoration: BoxDecoration(
+                border: Border.all(width: 1.5),
+                borderRadius: BorderRadius.circular(10)),
+            width: MediaQuery.of(context).size.width,
+            child: const TextField(
+              maxLines: 5,
+              decoration: InputDecoration(border: InputBorder.none),
+            ),
+          )
         ],
       ),
     ));
