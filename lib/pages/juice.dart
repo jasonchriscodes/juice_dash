@@ -64,6 +64,66 @@ class _JuiceState extends State<Juice> {
               }),
             ],
           ),
+          const SizedBox(
+            height: 20.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text("Add sugar", style: AppWidget.headlineTextStyle(18.0)),
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Row(
+              children: [
+                Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1.5),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                    child: Text(
+                      "Sugar",
+                      style: AppWidget.headlineTextStyle(18.0),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                Container(
+                  decoration: BoxDecoration(
+                      color: const Color(0xffecb47f),
+                      border: Border.all(width: 1.5),
+                      borderRadius: BorderRadius.circular(60)),
+                  child: const Icon(Icons.remove),
+                ),
+                const SizedBox(width: 10.0),
+                Container(
+                  height: 50,
+                  width: 80,
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1.5),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                    child: Text(
+                      "1",
+                      style: AppWidget.headlineTextStyle(18.0),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                Container(
+                  decoration: BoxDecoration(
+                      color: const Color(0xffecb47f),
+                      border: Border.all(width: 1.5),
+                      borderRadius: BorderRadius.circular(60)),
+                  child: const Icon(Icons.add),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     ));
