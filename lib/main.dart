@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:juice_dash/pages/home.dart';
+import 'package:juice_dash/pages/juice.dart';
 import 'package:juice_dash/pages/onboarding.dart';
 
 void main() {
@@ -13,7 +14,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Juice(),
     );
   }
 }
