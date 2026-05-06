@@ -78,7 +78,31 @@ class _SignupState extends State<Signup> {
                     hintStyle: TextStyle(fontFamily: "Poppins")),
               ),
             ),
-            Container()
+            const SizedBox(
+              height: 40,
+            ),
+            Center(
+              child: Material(
+                elevation: 5,
+                borderRadius: BorderRadius.circular(60),
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                      color: const Color(0xffb900e7),
+                      borderRadius: BorderRadius.circular(60)),
+                  width: 200,
+                  child: const Center(
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: "Poppins"),
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         )
       ]),
