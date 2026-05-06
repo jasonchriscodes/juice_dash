@@ -102,6 +102,29 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
               ),
+            ),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Already have an account?",
+                  style: AppWidget.headlineTextStyle(18),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  "Login",
+                  style: TextStyle(
+                      color: Color(0xffb900e7),
+                      fontSize: 18,
+                      fontFamily: "Poppins"),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 40,
             )
           ],
         )
