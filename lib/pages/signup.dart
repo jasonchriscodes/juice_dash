@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:juice_dash/pages/login.dart';
 import 'package:juice_dash/services/support_widget.dart';
 
 class Signup extends StatefulWidget {
@@ -108,12 +109,18 @@ class _SignupState extends State<Signup> {
                 const SizedBox(
                   width: 10,
                 ),
-                const Text(
-                  "Log In",
-                  style: TextStyle(
-                      color: Color(0xffb900e7),
-                      fontSize: 18,
-                      fontFamily: "Poppins"),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const Login()));
+                  },
+                  child: const Text(
+                    "Log In",
+                    style: TextStyle(
+                        color: Color(0xffb900e7),
+                        fontSize: 18,
+                        fontFamily: "Poppins"),
+                  ),
                 )
               ],
             ),
