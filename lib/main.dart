@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:juice_dash/pages/bottom_nav.dart';
 import 'package:juice_dash/pages/home.dart';
 import 'package:juice_dash/pages/juice.dart';
+import 'package:juice_dash/pages/login.dart';
 import 'package:juice_dash/pages/onboarding.dart';
 import 'package:juice_dash/pages/signup.dart';
 
@@ -16,7 +17,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Signup(),
+      home: Login(),
     );
   }
 }
