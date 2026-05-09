@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "213483775299",
+    "project_id": "juicedash-b5ec3",
+    "storage_bucket": "juicedash-b5ec3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213483775299:android:8e485d0f1618d49ca33bf6",
+        "android_client_info": {
+          "package_name": "com.example.juice_dash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8OCTXbReVLhYSqIbB0JPyDpWDbYT6CNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

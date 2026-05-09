@@ -6,7 +6,9 @@ import 'package:juice_dash/pages/login.dart';
 import 'package:juice_dash/pages/onboarding.dart';
 import 'package:juice_dash/pages/signup.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MainApp());
 }
 
