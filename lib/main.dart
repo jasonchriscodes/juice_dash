@@ -1,14 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:juice_dash/pages/bottom_nav.dart';
-import 'package:juice_dash/pages/home.dart';
-import 'package:juice_dash/pages/juice.dart';
 import 'package:juice_dash/pages/login.dart';
-import 'package:juice_dash/pages/onboarding.dart';
-import 'package:juice_dash/pages/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyD8OCTXbReVLhYSqIbB0JPyDpWDbYT6CNA",
+      appId: "1:213483775299:android:8e485d0f1618d49ca33bf6",
+      messagingSenderId: "213483775299",
+      projectId: "juicedash-b5ec3",
+      storageBucket: "juicedash-b5ec3.firebasestorage.app",
+    ),
+  );
+
   runApp(const MainApp());
 }
 
