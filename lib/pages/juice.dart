@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:http/http.dart' as http;
 import 'package:juice_dash/services/shared_pref.dart';
 import 'package:juice_dash/services/support_widget.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class Juice extends StatefulWidget {
   const Juice({super.key});
@@ -12,9 +15,8 @@ class Juice extends StatefulWidget {
 
 class _JuiceState extends State<Juice> {
   String? id;
-  late Razorpay _razorpay;
 
-  final String razorKey = "YOUR_RAZORPAY_KEY_HERE";
+  final double totalPrice = 50.00;
 
   final List<String> fruits = [
     "images/tomato.png",
@@ -31,14 +33,7 @@ class _JuiceState extends State<Juice> {
   @override
   void initState() {
     super.initState();
-
     getOnTheLoad();
-
-    _razorpay = Razorpay();
-
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   Future<void> getOnTheLoad() async {
@@ -46,62 +41,59 @@ class _JuiceState extends State<Juice> {
     setState(() {});
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Payment Successful: ${response.paymentId}"),
-      ),
-    );
+  int nzdToCents(double amount) {
+    return (amount * 100).round();
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Payment Failed: ${response.message}"),
-      ),
-    );
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("External Wallet: ${response.walletName}"),
-      ),
-    );
-  }
-
-  void openCheckout(String amount) {
-    var options = {
-      "key": razorKey,
-      "amount": int.parse(amount) * 100,
-      "name": "Juice Dash",
-      "description": "Payment for your order",
-      "prefill": {
-        "contact": "8888888888",
-        "email": "H2h0d@example.com",
-      },
-      "external": {
-        "wallets": ["paytm"],
-      },
-    };
-
+  Future<void> makePayment() async {
     try {
-      _razorpay.open(options);
-    } catch (e) {
-      debugPrint("Error: $e");
-    }
-  }
+      final response = await http.post(
+        Uri.parse("http://10.0.2.2:4242/create-payment-intent"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "amount": nzdToCents(totalPrice),
+        }),
+      );
 
-  @override
-  void dispose() {
-    _razorpay.clear();
-    super.dispose();
+      final jsonResponse = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        throw Exception(jsonResponse["error"] ?? "Payment failed");
+      }
+
+      final String clientSecret = jsonResponse["clientSecret"];
+
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: "Juice Dash",
+        ),
+      );
+
+      await Stripe.instance.presentPaymentSheet();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text("Payment successful"),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Payment failed: $e"),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -226,6 +218,7 @@ class _JuiceState extends State<Juice> {
                 maxLines: 5,
                 decoration: InputDecoration(
                   border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(10),
                 ),
               ),
             ),
@@ -242,13 +235,13 @@ class _JuiceState extends State<Juice> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Total Price : \$50",
+                    "Total Price : \$${totalPrice.toStringAsFixed(2)} NZD",
                     style: AppWidget.headlineTextStyle(18),
                   ),
                   const SizedBox(height: 5),
                   GestureDetector(
                     onTap: () {
-                      openCheckout("50");
+                      makePayment();
                     },
                     child: Container(
                       width: 200,
@@ -269,6 +262,7 @@ class _JuiceState extends State<Juice> {
                 ],
               ),
             ),
+            const SizedBox(height: 30.0),
           ],
         ),
       ),
