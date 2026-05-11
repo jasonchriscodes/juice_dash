@@ -10,7 +10,6 @@
 .svn/
 migrate_working_dir/
 
-
 # IntelliJ related
 *.iml
 *.ipr
@@ -32,6 +31,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+node_modules/
+.env
+.env.*
 
 # Symbolication related
 app.*.symbols
