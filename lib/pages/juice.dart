@@ -7,7 +7,16 @@ import 'package:juice_dash/services/shared_pref.dart';
 import 'package:juice_dash/services/support_widget.dart';
 
 class Juice extends StatefulWidget {
-  const Juice({super.key});
+  final String juiceTitle;
+  final String juiceImage;
+  final String juiceKcal;
+
+  const Juice({
+    super.key,
+    required this.juiceTitle,
+    required this.juiceImage,
+    required this.juiceKcal,
+  });
 
   @override
   State<Juice> createState() => _JuiceState();
@@ -15,6 +24,8 @@ class Juice extends StatefulWidget {
 
 class _JuiceState extends State<Juice> {
   String? id;
+
+  int sugarCount = 1;
 
   final double totalPrice = 50.00;
 
@@ -115,6 +126,34 @@ class _JuiceState extends State<Juice> {
             const SizedBox(height: 20.0),
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: [
+                  Text(
+                    widget.juiceTitle,
+                    style: AppWidget.headlineTextStyle(22),
+                  ),
+                  const SizedBox(width: 12.0),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffbcd986),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      widget.juiceKcal,
+                      style: const TextStyle(
+                        fontFamily: "Poppins",
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
               child: Text(
                 "Choose fruit to mix",
                 style: AppWidget.headlineTextStyle(18),
@@ -181,7 +220,7 @@ class _JuiceState extends State<Juice> {
                     ),
                     child: Center(
                       child: Text(
-                        "1",
+                        sugarCount.toString(),
                         style: AppWidget.headlineTextStyle(18.0),
                       ),
                     ),

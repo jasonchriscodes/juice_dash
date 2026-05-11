@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:juice_dash/pages/bottom_nav.dart';
+import 'package:juice_dash/pages/juice.dart';
 import 'package:juice_dash/services/support_widget.dart';
 
 class Home extends StatefulWidget {
@@ -186,17 +187,31 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color(0xfffebd7f),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 2.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Add",
-                      style: AppWidget.headlineTextStyle(17.0),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Juice(
+                          juiceTitle: title,
+                          juiceImage: image,
+                          juiceKcal: kcal,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color(0xfffebd7f),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(width: 2.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Add",
+                        style: AppWidget.headlineTextStyle(17.0),
+                      ),
                     ),
                   ),
                 ),
