@@ -202,13 +202,22 @@ class _JuiceState extends State<Juice> {
                     ),
                   ),
                   const SizedBox(width: 10.0),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xffecb47f),
-                      border: Border.all(width: 1.5),
-                      borderRadius: BorderRadius.circular(60),
+                  GestureDetector(
+                    onTap: () {
+                      if (sugarCount > 0) {
+                        setState(() {
+                          sugarCount--;
+                        });
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xffecb47f),
+                        border: Border.all(width: 1.5),
+                        borderRadius: BorderRadius.circular(60),
+                      ),
+                      child: const Icon(Icons.remove),
                     ),
-                    child: const Icon(Icons.remove),
                   ),
                   const SizedBox(width: 10.0),
                   Container(
@@ -226,13 +235,20 @@ class _JuiceState extends State<Juice> {
                     ),
                   ),
                   const SizedBox(width: 10.0),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xffecb47f),
-                      border: Border.all(width: 1.5),
-                      borderRadius: BorderRadius.circular(60),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        sugarCount++;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xffecb47f),
+                        border: Border.all(width: 1.5),
+                        borderRadius: BorderRadius.circular(60),
+                      ),
+                      child: const Icon(Icons.add),
                     ),
-                    child: const Icon(Icons.add),
                   ),
                 ],
               ),
