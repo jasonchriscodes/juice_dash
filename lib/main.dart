@@ -1,24 +1,25 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:juice_dash/pages/home.dart';
 import 'package:juice_dash/pages/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await dotenv.load(fileName: ".env");
+
   await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "AIzaSyD8OCTXbReVLhYSqIbB0JPyDpWDbYT6CNA",
-      appId: "1:213483775299:android:8e485d0f1618d49ca33bf6",
-      messagingSenderId: "213483775299",
-      projectId: "juicedash-b5ec3",
-      storageBucket: "juicedash-b5ec3.firebasestorage.app",
+    options: FirebaseOptions(
+      apiKey: dotenv.get("FIREBASE_API_KEY"),
+      appId: dotenv.get("FIREBASE_APP_ID"),
+      messagingSenderId: dotenv.get("FIREBASE_MESSAGING_SENDER_ID"),
+      projectId: dotenv.get("FIREBASE_PROJECT_ID"),
+      storageBucket: dotenv.get("FIREBASE_STORAGE_BUCKET"),
     ),
   );
 
-  Stripe.publishableKey =
-      "pk_test_51TVYWaQkiOa9VUMNazbLLBz7QaOfSBqez94CH6sJckvjwGyEtQq81QwFKClwDhvvqknRwES2wIQKOWmH76txL3KD001zWaCWxq";
+  Stripe.publishableKey = dotenv.get("STRIPE_PUBLISHABLE_KEY");
   await Stripe.instance.applySettings();
 
   runApp(const MainApp());
@@ -31,7 +32,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Login(),
     );
   }
 }

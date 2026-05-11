@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
+import 'package:juice_dash/services/database.dart';
 import 'package:juice_dash/services/shared_pref.dart';
 import 'package:juice_dash/services/support_widget.dart';
 
@@ -23,11 +25,12 @@ class Juice extends StatefulWidget {
 }
 
 class _JuiceState extends State<Juice> {
-  String? id;
+  TextEditingController notesController = new TextEditingController();
+  String? id, username;
 
   int sugarCount = 1;
 
-  final double totalPrice = 50.00;
+  final double totalPrice = 10.00;
 
   final List<String> fruits = [
     "images/tomato.png",
@@ -49,6 +52,7 @@ class _JuiceState extends State<Juice> {
 
   Future<void> getOnTheLoad() async {
     id = await SharedPreferenceHelper().getUserId();
+    username = await SharedPreferenceHelper().getUserName();
     setState(() {});
   }
 
@@ -59,7 +63,7 @@ class _JuiceState extends State<Juice> {
   Future<void> makePayment() async {
     try {
       final response = await http.post(
-        Uri.parse("http://10.0.2.2:4242/create-payment-intent"),
+        Uri.parse(dotenv.get("STRIPE_SERVER_URL")),
         headers: {
           "Content-Type": "application/json",
         },
@@ -85,10 +89,30 @@ class _JuiceState extends State<Juice> {
 
       await Stripe.instance.presentPaymentSheet();
 
+      Map<String, dynamic> addUserOrder = {
+        "JuiceName": widget.juiceTitle,
+        "JuiceImage": widget.juiceImage,
+        "Kcal": widget.juiceKcal,
+        "Sugar": sugarCount.toString(),
+        "Fruit1": selectedFruit1,
+        "Fruit2": selectedFruit2,
+        "Fruit3": selectedFruit3,
+        "Amount": totalPrice.toStringAsFixed(2),
+        "Notes": notesController.text,
+        "Username": username ?? "",
+        "Delivered": "false",
+        "CreatedAt": DateTime.now(),
+      };
+
+      if (id != null && id!.isNotEmpty) {
+        await DatabaseMethods().addUserOrder(addUserOrder, id!);
+        await DatabaseMethods().addAdminOrder(addUserOrder);
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.green,
-          content: Text("Payment successful"),
+          content: Text("Payment successful and order saved"),
         ),
       );
     } catch (e) {
@@ -263,13 +287,15 @@ class _JuiceState extends State<Juice> {
             ),
             const SizedBox(height: 10.0),
             Container(
+              padding: EdgeInsets.only(left: 10),
               margin: const EdgeInsets.only(left: 20.0, right: 20.0),
               decoration: BoxDecoration(
                 border: Border.all(width: 1.5),
                 borderRadius: BorderRadius.circular(10),
               ),
               width: MediaQuery.of(context).size.width,
-              child: const TextField(
+              child: TextField(
+                controller: notesController,
                 maxLines: 5,
                 decoration: InputDecoration(
                   border: InputBorder.none,
