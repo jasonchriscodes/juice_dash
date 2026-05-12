@@ -20,8 +20,13 @@ class _OrderState extends State<Order> {
 
   getOnTheLoad() async {
     id = await SharedPreferenceHelper().getUserId();
-    orderStream = await DatabaseMethods().getAllOrders(id!);
-    setState(() {});
+
+    if (id != null && id!.isNotEmpty) {
+      orderStream = await DatabaseMethods().getAllOrders(id!);
+      setState(() {});
+    } else {
+      debugPrint("User ID is null. Please login again.");
+    }
   }
 
   @override
@@ -31,6 +36,17 @@ class _OrderState extends State<Order> {
   }
 
   Widget allOrder() {
+    if (orderStream == null) {
+      return const Center(
+        child: Text(
+          "Please login again to view your orders",
+          style: TextStyle(
+            fontFamily: "Poppins",
+            fontSize: 16,
+          ),
+        ),
+      );
+    }
     return StreamBuilder(
       stream: orderStream,
       builder: (context, AsyncSnapshot snapshot) {

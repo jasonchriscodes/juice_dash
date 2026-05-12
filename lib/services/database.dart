@@ -23,10 +23,17 @@ class DatabaseMethods {
   }
 
   Future<Stream<QuerySnapshot>> getAllOrders(String id) async {
-    return await FirebaseFirestore.instance
+    return FirebaseFirestore.instance
         .collection("users")
         .doc(id)
         .collection("Orders")
         .snapshots();
+  }
+
+  Future<QuerySnapshot> getUserByEmail(String email) {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .where("Email", isEqualTo: email)
+        .get();
   }
 }

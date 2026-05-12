@@ -1,9 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:juice_dash/pages/home.dart';
 import 'package:juice_dash/pages/signup.dart';
+import 'package:juice_dash/services/database.dart';
+import 'package:juice_dash/services/shared_pref.dart';
 import 'package:juice_dash/services/support_widget.dart';
 
 class Login extends StatefulWidget {
@@ -25,6 +28,18 @@ class _LoginState extends State<Login> {
         email: email!,
         password: password!,
       );
+
+      QuerySnapshot userSnapshot =
+          await DatabaseMethods().getUserByEmail(email!);
+
+      if (userSnapshot.docs.isNotEmpty) {
+        var userData = userSnapshot.docs.first.data() as Map<String, dynamic>;
+
+        await SharedPreferenceHelper().saveUserId(userData["Id"]);
+        await SharedPreferenceHelper().saveUserName(userData["Name"]);
+        await SharedPreferenceHelper().saveUserEmail(userData["Email"]);
+        await SharedPreferenceHelper().saveUserPoints(userData["Points"]);
+      }
 
       Navigator.pushReplacement(
         context,
