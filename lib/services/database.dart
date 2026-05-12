@@ -21,4 +21,12 @@ class DatabaseMethods {
         .collection("adminOrder")
         .add(addAdminOrder);
   }
+
+  Future<Stream<QuerySnapshot>> getAllOrders(String id) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .collection("Orders")
+        .snapshots();
+  }
 }
