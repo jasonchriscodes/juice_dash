@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:juice_dash/pages/bottom_nav.dart';
 import 'package:juice_dash/pages/juice.dart';
+import 'package:juice_dash/pages/order.dart';
 import 'package:juice_dash/services/support_widget.dart';
 
 class Home extends StatefulWidget {
@@ -92,18 +93,17 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNav(
         selectedIndex: selectedIndex,
         onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-
           if (index == 0) {
-            // Home
+            // Already on Home page
           } else if (index == 1) {
-            // Order
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const Order()),
+            );
           } else if (index == 2) {
-            // History
+            // Navigate to History page later
           } else if (index == 3) {
-            // Profile
+            // Navigate to Profile page later
           }
         },
       ),
