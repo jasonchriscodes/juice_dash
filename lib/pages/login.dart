@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:juice_dash/pages/home.dart';
+import 'package:juice_dash/pages/order.dart' as order_page;
 import 'package:juice_dash/pages/manage_order.dart';
 import 'package:juice_dash/pages/signup.dart';
 import 'package:juice_dash/services/database.dart';
@@ -54,7 +54,7 @@ class _LoginState extends State<Login> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) => const order_page.Order()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

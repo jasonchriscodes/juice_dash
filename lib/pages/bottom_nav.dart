@@ -36,8 +36,6 @@ class BottomNav extends StatelessWidget {
             color: Colors.black.withOpacity(0.7),
             width: 2,
           ),
-
-          // changed here
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(35),
             topRight: Radius.circular(35),
@@ -55,12 +53,12 @@ class BottomNav extends StatelessWidget {
             ),
             _navButton(
               index: 1,
-              icon: Icons.shopping_bag_rounded,
+              imagePath: "images/juice.png",
               size: buttonSize,
             ),
             _navButton(
               index: 2,
-              icon: Icons.history_rounded,
+              icon: Icons.shopping_bag_rounded,
               size: buttonSize,
             ),
             _navButton(
@@ -76,7 +74,8 @@ class BottomNav extends StatelessWidget {
 
   Widget _navButton({
     required int index,
-    required IconData icon,
+    IconData? icon,
+    String? imagePath,
     required double size,
   }) {
     final bool isSelected = selectedIndex == index;
@@ -95,10 +94,19 @@ class BottomNav extends StatelessWidget {
             width: 1.5,
           ),
         ),
-        child: Icon(
-          icon,
-          size: size * 0.5,
-          color: Colors.black87,
+        child: Center(
+          child: imagePath != null
+              ? Image.asset(
+                  imagePath,
+                  height: size * 0.58,
+                  width: size * 0.58,
+                  fit: BoxFit.contain,
+                )
+              : Icon(
+                  icon,
+                  size: size * 0.5,
+                  color: Colors.black87,
+                ),
         ),
       ),
     );

@@ -2,7 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:juice_dash/pages/home.dart';
+import 'package:juice_dash/pages/order.dart';
 import 'package:juice_dash/pages/login.dart';
 import 'package:juice_dash/services/database.dart';
 import 'package:juice_dash/services/shared_pref.dart';
@@ -49,7 +49,7 @@ class _SignupState extends State<Signup> {
       await DatabaseMethods().addUserInfo(userInfoMap, id);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => const Order()),
       );
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.green,

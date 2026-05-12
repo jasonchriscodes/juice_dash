@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:juice_dash/pages/bag.dart';
 import 'package:juice_dash/pages/bottom_nav.dart';
 import 'package:juice_dash/pages/home.dart';
-import 'package:juice_dash/services/database.dart';
-import 'package:juice_dash/services/shared_pref.dart';
+import 'package:juice_dash/pages/juice.dart';
 import 'package:juice_dash/services/support_widget.dart';
 
 class Order extends StatefulWidget {
@@ -14,160 +13,38 @@ class Order extends StatefulWidget {
 }
 
 class _OrderState extends State<Order> {
-  Stream? orderStream;
-  int selectedIndex = 1; // Order tab selected
-  String? id;
-
-  getOnTheLoad() async {
-    id = await SharedPreferenceHelper().getUserId();
-
-    if (id != null && id!.isNotEmpty) {
-      orderStream = await DatabaseMethods().getAllOrders(id!);
-      setState(() {});
-    } else {
-      debugPrint("User ID is null. Please login again.");
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getOnTheLoad();
-  }
-
-  Widget allOrder() {
-    if (orderStream == null) {
-      return const Center(
-        child: Text(
-          "Please login again to view your orders",
-          style: TextStyle(
-            fontFamily: "Poppins",
-            fontSize: 16,
-          ),
-        ),
-      );
-    }
-    return StreamBuilder(
-      stream: orderStream,
-      builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data.docs[index];
-
-                  return Container(
-                    margin: const EdgeInsets.all(20),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(20),
-                      elevation: 3,
-                      child: Container(
-                        height: 130,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Image.asset(
-                                ds["JuiceName"] == "Orange Juice"
-                                    ? "images/orange-juice.png"
-                                    : ds["JuiceName"] == "Grapes Juice"
-                                        ? "images/grape-juice.png"
-                                        : "images/orange-juice.png",
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  ds["Username"] ?? "Unknown User",
-                                  style: AppWidget.headlineTextStyle(18),
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    _fruitIcon(ds["Fruit1"]),
-                                    const SizedBox(width: 5),
-                                    _fruitIcon(ds["Fruit2"]),
-                                    const SizedBox(width: 6),
-                                    _fruitIcon(ds["Fruit3"]),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "Sugar: ${ds["Sugar"] ?? "0"}",
-                                  style: AppWidget.headlineTextStyle(16),
-                                ),
-                                Text(
-                                  ds["Delivered"] == "true"
-                                      ? "Delivered"
-                                      : "Yet to be delivered",
-                                  style: TextStyle(
-                                    color: ds["Delivered"] == "true"
-                                        ? Colors.green
-                                        : Colors.red,
-                                    fontSize: 15,
-                                    fontFamily: "Poppins",
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              )
-            : const Center(
-                child: CircularProgressIndicator(),
-              );
-      },
-    );
-  }
-
-  Widget _fruitIcon(String? imagePath) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(41, 0, 0, 0),
-        borderRadius: BorderRadius.circular(60),
-      ),
-      child: Image.asset(
-        imagePath ?? "images/tomato.png",
-        height: 30,
-        width: 30,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
+  int selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(
-                "Order Page",
-                style: AppWidget.headlineTextStyle(25),
+            const SizedBox(height: 15.0),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text(
+                  "Find Our Best Juice",
+                  style: AppWidget.headlineTextStyle(25.0),
+                ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Image.asset(
+                "images/banner.png",
+                height: size.height * 0.16,
+                width: double.infinity,
+                fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(height: 10.0),
             Expanded(
               child: Stack(
                 children: [
@@ -177,7 +54,37 @@ class _OrderState extends State<Order> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  allOrder(),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 80.0,
+                        left: 20.0,
+                        right: 20.0,
+                        bottom: 20.0,
+                      ),
+                      child: Column(
+                        children: [
+                          _juiceItem(
+                            context: context,
+                            image: "images/orange-juice.png",
+                            title: "Orange Juice",
+                            kcal: "60 kcal",
+                            description:
+                                "Enjoy the freshness when starting\n your morning activities",
+                          ),
+                          const SizedBox(height: 30.0),
+                          _juiceItem(
+                            context: context,
+                            image: "images/grape-juice.png",
+                            title: "Grapes Juice",
+                            kcal: "80 kcal",
+                            description:
+                                "Drink this fresh grapes juice makes\n you forgot the tiring activities",
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -187,10 +94,6 @@ class _OrderState extends State<Order> {
       bottomNavigationBar: BottomNav(
         selectedIndex: selectedIndex,
         onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-
           if (index == 0) {
             Navigator.pushReplacement(
               context,
@@ -199,12 +102,128 @@ class _OrderState extends State<Order> {
           } else if (index == 1) {
             // Already on Order page
           } else if (index == 2) {
-            // Navigate to History page later
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const Bag()),
+            );
           } else if (index == 3) {
-            // Navigate to Profile page later
+            // Profile page later
           }
         },
       ),
+    );
+  }
+
+  Widget _juiceItem({
+    required BuildContext context,
+    required String image,
+    required String title,
+    required String kcal,
+    required String description,
+  }) {
+    final size = MediaQuery.of(context).size;
+
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 35.0,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(width: 2.0),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Image.asset(
+            image,
+            height: size.width * 0.22,
+            width: size.width * 0.22,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(width: 15.0),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(width: 2.0),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: AppWidget.headlineTextStyle(17.0),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Container(
+                      height: 28,
+                      width: 65,
+                      decoration: BoxDecoration(
+                        color: const Color(0xffbcd986),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          kcal,
+                          style: const TextStyle(
+                            fontFamily: "Poppins",
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10.0),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 11.0,
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Juice(
+                          juiceTitle: title,
+                          juiceImage: image,
+                          juiceKcal: kcal,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color(0xfffebd7f),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(width: 2.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Add",
+                        style: AppWidget.headlineTextStyle(17.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -11,7 +11,7 @@ app.use(express.json());
 
 function maskKey(key) {
   if (!key) return "MISSING";
-  return `${key.substring(0, 12)}...${key.substring(key.length - 6)} length=${key.length}`;
+  return `last 5: ${key.slice(-5)} length=${key.length}`;
 }
 
 console.log("Stripe key loaded:", process.env.STRIPE_SECRET_KEY ? "YES" : "NO");

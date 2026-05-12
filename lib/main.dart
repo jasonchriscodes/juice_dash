@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:juice_dash/pages/home.dart';
+import 'package:juice_dash/pages/order.dart';
 import 'package:juice_dash/pages/login.dart';
 
 void main() async {
