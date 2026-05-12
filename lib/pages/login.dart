@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:juice_dash/pages/home.dart';
+import 'package:juice_dash/pages/manage_order.dart';
 import 'package:juice_dash/pages/signup.dart';
 import 'package:juice_dash/services/database.dart';
 import 'package:juice_dash/services/shared_pref.dart';
@@ -29,6 +30,17 @@ class _LoginState extends State<Login> {
         password: password!,
       );
 
+      QuerySnapshot adminSnapshot =
+          await DatabaseMethods().getAdminByEmail(email!);
+
+      if (adminSnapshot.docs.isNotEmpty) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ManageOrder()),
+        );
+        return;
+      }
+
       QuerySnapshot userSnapshot =
           await DatabaseMethods().getUserByEmail(email!);
 
@@ -39,12 +51,22 @@ class _LoginState extends State<Login> {
         await SharedPreferenceHelper().saveUserName(userData["Name"]);
         await SharedPreferenceHelper().saveUserEmail(userData["Email"]);
         await SharedPreferenceHelper().saveUserPoints(userData["Points"]);
-      }
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              "Account found in Auth but not in users/admins collection",
+              style: AppWidget.whiteTextStyle(18),
+            ),
+          ),
+        );
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == "invalid-credential" ||
           e.code == "wrong-password" ||

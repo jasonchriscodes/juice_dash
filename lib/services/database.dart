@@ -8,18 +8,12 @@ class DatabaseMethods {
         .set(userInfoMap);
   }
 
-  Future addUserOrder(Map<String, dynamic> addOrder, String id) {
+  Future addUserOrder(Map<String, dynamic> addOrder, String userId) {
     return FirebaseFirestore.instance
         .collection("users")
-        .doc(id)
+        .doc(userId)
         .collection("Orders")
         .add(addOrder);
-  }
-
-  Future addAdminOrder(Map<String, dynamic> addAdminOrder) {
-    return FirebaseFirestore.instance
-        .collection("adminOrder")
-        .add(addAdminOrder);
   }
 
   Future<Stream<QuerySnapshot>> getAllOrders(String id) async {
@@ -30,10 +24,29 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> getAllUsersOrders() {
+    return FirebaseFirestore.instance.collectionGroup("Orders").snapshots();
+  }
+
   Future<QuerySnapshot> getUserByEmail(String email) {
     return FirebaseFirestore.instance
         .collection("users")
         .where("Email", isEqualTo: email)
         .get();
   }
+
+  Future<QuerySnapshot> getAdminByEmail(String email) {
+    return FirebaseFirestore.instance
+        .collection("admins")
+        .where("Email", isEqualTo: email)
+        .get();
+  }
+
+  Future<void> markUserOrderDelivered(DocumentReference orderRef) async {
+    await orderRef.update({
+      "Delivered": "true",
+    });
+  }
+
+  addAdminOrder(Map<String, dynamic> addUserOrder, String orderId) {}
 }

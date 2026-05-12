@@ -87,8 +87,6 @@ class _JuiceState extends State<Juice> {
         ),
       );
 
-      await Stripe.instance.presentPaymentSheet();
-
       Map<String, dynamic> addUserOrder = {
         "JuiceName": widget.juiceTitle,
         "JuiceImage": widget.juiceImage,
@@ -106,7 +104,6 @@ class _JuiceState extends State<Juice> {
 
       if (id != null && id!.isNotEmpty) {
         await DatabaseMethods().addUserOrder(addUserOrder, id!);
-        await DatabaseMethods().addAdminOrder(addUserOrder);
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
